@@ -132,7 +132,7 @@ anomaly_detection/
 
 - Ahmed Mir (am2552@rit.edu)
 - Rochester Institute of Technology
-- Course: Time Series Analysis, Spring 2024
+- Course: IMGS 789 : Machine Learning for Difficult Data
 
 ## License
 
