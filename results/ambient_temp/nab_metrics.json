@@ -1,0 +1,57 @@
+{
+    "ARIMA": {
+        "precision": 0.13333333333333333,
+        "recall": 0.008264462809917356,
+        "f1_score": 0.01556420233463035,
+        "true_positives": 6.0,
+        "false_positives": 39.0,
+        "true_negatives": 6502.0,
+        "false_negatives": 720.0,
+        "false_positive_rate": 0.005962391071701574,
+        "false_negative_rate": 0.9917355371900827
+    },
+    "Seasonal_Decomp": {
+        "precision": 0.19078947368421054,
+        "recall": 0.03994490358126722,
+        "f1_score": 0.06605922551252848,
+        "true_positives": 29.0,
+        "false_positives": 123.0,
+        "true_negatives": 6418.0,
+        "false_negatives": 697.0,
+        "false_positive_rate": 0.01880446414921266,
+        "false_negative_rate": 0.9600550964187328
+    },
+    "Isolation_Forest": {
+        "precision": 0.42699724517906334,
+        "recall": 0.21349862258953167,
+        "f1_score": 0.2846648301193756,
+        "true_positives": 155.0,
+        "false_positives": 208.0,
+        "true_negatives": 6333.0,
+        "false_negatives": 571.0,
+        "false_positive_rate": 0.031799419049075066,
+        "false_negative_rate": 0.7865013774104683
+    },
+    "LSTM_Autoencoder": {
+        "precision": 0.20987654320987653,
+        "recall": 0.046831955922865015,
+        "f1_score": 0.07657657657657657,
+        "true_positives": 34.0,
+        "false_positives": 128.0,
+        "true_negatives": 6413.0,
+        "false_negatives": 692.0,
+        "false_positive_rate": 0.01956887326096927,
+        "false_negative_rate": 0.953168044077135
+    },
+    "TCN": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "true_positives": 0.0,
+        "false_positives": 0.0,
+        "true_negatives": 6541.0,
+        "false_negatives": 726.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 1.0
+    }
+}

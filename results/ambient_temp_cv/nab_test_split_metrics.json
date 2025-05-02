@@ -1,0 +1,46 @@
+{
+    "Arima": {
+        "precision": 0.13402061855670103,
+        "recall": 0.8333333333333334,
+        "f1_score": 0.23090586145648312,
+        "true_positives": 130.0,
+        "false_positives": 840.0,
+        "true_negatives": 458.0,
+        "false_negatives": 26.0,
+        "false_positive_rate": 0.6471494607087828,
+        "false_negative_rate": 0.16666666666666666
+    },
+    "Seasonal Decomp": {
+        "precision": 0.17475728155339806,
+        "recall": 0.11538461538461539,
+        "f1_score": 0.138996138996139,
+        "true_positives": 18.0,
+        "false_positives": 85.0,
+        "true_negatives": 1213.0,
+        "false_negatives": 138.0,
+        "false_positive_rate": 0.06548536209553159,
+        "false_negative_rate": 0.8846153846153846
+    },
+    "Isolation Forest": {
+        "precision": 0.36,
+        "recall": 0.28846153846153844,
+        "f1_score": 0.3202846975088968,
+        "true_positives": 45.0,
+        "false_positives": 80.0,
+        "true_negatives": 1218.0,
+        "false_negatives": 111.0,
+        "false_positive_rate": 0.061633281972265024,
+        "false_negative_rate": 0.7115384615384616
+    },
+    "Lstm Ae": {
+        "precision": 0.17813765182186234,
+        "recall": 0.28205128205128205,
+        "f1_score": 0.21836228287841192,
+        "true_positives": 44.0,
+        "false_positives": 203.0,
+        "true_negatives": 1095.0,
+        "false_negatives": 112.0,
+        "false_positive_rate": 0.15639445300462249,
+        "false_negative_rate": 0.717948717948718
+    }
+}
