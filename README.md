@@ -130,7 +130,7 @@ anomaly_detection/
 
 ## Author
 
-- Ahmed Mir (am2552@rit.edu)
+- Anurag Mishra (am2552@rit.edu)
 - Rochester Institute of Technology
 - Course: IMGS 789 : Machine Learning for Difficult Data
 
