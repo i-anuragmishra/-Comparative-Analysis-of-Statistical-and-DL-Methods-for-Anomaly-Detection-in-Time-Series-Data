@@ -47,7 +47,7 @@ We evaluated various anomaly detection methods on the Numenta Anomaly Benchmark 
 ## Sample Visualizations
 
 ### LSTM Autoencoder Performance
-![LSTM Results](results/ambient_temp/nab_Lstm_Ae.png)
+![LSTM Results](results/ambient_temp_cv/nab_Lstm_Ae.png)
 *LSTM Autoencoder performance on ambient temperature data. Note how the model detects anomalies primarily in the middle section of the data.*
 
 ### Isolation Forest Detection
