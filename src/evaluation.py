@@ -6,34 +6,18 @@ from plotly.subplots import make_subplots
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 
 def calculate_metrics(y_true, y_pred, verbose=True):
-    """
-    Calculate evaluation metrics for anomaly detection.
     
-    Parameters:
-    -----------
-    y_true: array-like
-        Ground truth anomaly labels
-    y_pred: array-like
-        Predicted anomaly labels
-    verbose: bool
-        Whether to print the metrics
-        
-    Returns:
-    --------
-    dict
-        Dictionary of metrics
-    """
-    # Calculate basic metrics
+    
     precision = precision_score(y_true, y_pred)
     recall = recall_score(y_true, y_pred)
     f1 = f1_score(y_true, y_pred)
     
-    # Calculate confusion matrix
+    
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
     
-    # Calculate NAB-like metrics (detection delay isn't directly captured)
-    fpr = fp / (fp + tn)  # False positive rate
-    fnr = fn / (fn + tp)  # False negative rate
+    
+    fpr = fp / (fp + tn)  
+    fnr = fn / (fn + tp)  
     
     metrics = {
         'precision': precision,
@@ -71,25 +55,7 @@ def calculate_metrics(y_true, y_pred, verbose=True):
     return metrics
 
 def calculate_detection_delay(anomaly_timestamps, detected_timestamps, max_delay=None):
-    """
-    Calculate detection delay for anomalies.
     
-    Parameters:
-    -----------
-    anomaly_timestamps: list or array-like
-        Timestamps of true anomalies
-    detected_timestamps: list or array-like
-        Timestamps of detected anomalies
-    max_delay: float or timedelta, optional
-        Maximum allowed delay for detection
-        
-    Returns:
-    --------
-    float
-        Average detection delay
-    float
-        Detection rate (percentage of anomalies detected within max_delay)
-    """
     if len(anomaly_timestamps) == 0:
         return 0, 0
     
@@ -100,19 +66,19 @@ def calculate_detection_delay(anomaly_timestamps, detected_timestamps, max_delay
         if len(detected_timestamps) == 0:
             continue
             
-        # Find closest detection after the anomaly
+        
         detection_times = [t for t in detected_timestamps if t >= anomaly_time]
         
         if detection_times:
             closest_detection = min(detection_times)
             delay = closest_detection - anomaly_time
             
-            # Check if detection is within max_delay
+            
             if max_delay is None or delay <= max_delay:
                 detected_anomalies += 1
                 total_delay += delay
     
-    # Calculate average delay and detection rate
+    
     avg_delay = total_delay / detected_anomalies if detected_anomalies > 0 else float('inf')
     detection_rate = detected_anomalies / len(anomaly_timestamps)
     
@@ -120,39 +86,17 @@ def calculate_detection_delay(anomaly_timestamps, detected_timestamps, max_delay
 
 def plot_anomalies(series, anomalies, title="Anomaly Detection Results", 
                    threshold=None, scores=None, ground_truth=None):
-    """
-    Plot time series with detected anomalies using matplotlib.
     
-    Parameters:
-    -----------
-    series: pd.Series
-        Time series data
-    anomalies: pd.Series or np.ndarray
-        Boolean array/series indicating anomalies
-    title: str
-        Plot title
-    threshold: float, optional
-        Anomaly threshold for plotting
-    scores: pd.Series or np.ndarray, optional
-        Anomaly scores
-    ground_truth: pd.Series or np.ndarray, optional
-        Ground truth anomaly labels
-        
-    Returns:
-    --------
-    matplotlib.figure.Figure
-        Figure object
-    """
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    # Plot original series
+    
     ax.plot(series.index, series.values, label='Time Series', color='blue')
     
-    # Plot anomalies
+    
     if isinstance(anomalies, pd.Series):
-        # Make sure indices are aligned
+        
         if not anomalies.index.equals(series.index):
-            # Reindex to match the series index
+            
             aligned_anomalies = pd.Series(False, index=series.index)
             aligned_anomalies.loc[anomalies.index.intersection(series.index)] = anomalies.loc[anomalies.index.intersection(series.index)]
             anomaly_points = series[aligned_anomalies]
@@ -164,10 +108,10 @@ def plot_anomalies(series, anomalies, title="Anomaly Detection Results",
     ax.scatter(anomaly_points.index, anomaly_points.values, color='red', 
                label='Detected Anomalies', s=50)
     
-    # Plot ground truth if available
+    
     if ground_truth is not None:
         if isinstance(ground_truth, pd.Series):
-            # Ensure ground truth aligns with series
+            
             aligned_ground_truth = pd.Series(False, index=series.index)
             aligned_ground_truth.loc[ground_truth.index.intersection(series.index)] = ground_truth.loc[ground_truth.index.intersection(series.index)]
             truth_points = series[aligned_ground_truth]
@@ -177,7 +121,7 @@ def plot_anomalies(series, anomalies, title="Anomaly Detection Results",
         ax.scatter(truth_points.index, truth_points.values, 
                     color='green', marker='x', label='True Anomalies', s=50)
     
-    # Plot anomaly scores if available
+    
     if scores is not None:
         ax2 = ax.twinx()
         if isinstance(scores, pd.Series):
@@ -207,36 +151,14 @@ def plot_anomalies(series, anomalies, title="Anomaly Detection Results",
 
 def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results", 
                          threshold=None, scores=None, ground_truth=None):
-    """
-    Plot time series with detected anomalies using Plotly for interactive visualization.
     
-    Parameters:
-    -----------
-    series: pd.Series
-        Time series data
-    anomalies: pd.Series or np.ndarray
-        Boolean array/series indicating anomalies
-    title: str
-        Plot title
-    threshold: float, optional
-        Anomaly threshold for plotting
-    scores: pd.Series or np.ndarray, optional
-        Anomaly scores
-    ground_truth: pd.Series or np.ndarray, optional
-        Ground truth anomaly labels
-        
-    Returns:
-    --------
-    plotly.graph_objects.Figure
-        Plotly figure object
-    """
-    # Create figure with secondary y-axis for scores
+    
     if scores is not None:
         fig = make_subplots(specs=[[{"secondary_y": True}]])
     else:
         fig = go.Figure()
     
-    # Add time series
+    
     fig.add_trace(
         go.Scatter(
             x=series.index, 
@@ -247,11 +169,11 @@ def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results",
         )
     )
     
-    # Add detected anomalies
+    
     if isinstance(anomalies, pd.Series):
-        # Make sure indices are aligned
+        
         if not anomalies.index.equals(series.index):
-            # Reindex to match the series index
+            
             aligned_anomalies = pd.Series(False, index=series.index)
             aligned_anomalies.loc[anomalies.index.intersection(series.index)] = anomalies.loc[anomalies.index.intersection(series.index)]
             anomaly_points = series[aligned_anomalies]
@@ -270,10 +192,10 @@ def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results",
         )
     )
     
-    # Add ground truth if available
+    
     if ground_truth is not None:
         if isinstance(ground_truth, pd.Series):
-            # Ensure ground truth aligns with series
+            
             aligned_ground_truth = pd.Series(False, index=series.index)
             aligned_ground_truth.loc[ground_truth.index.intersection(series.index)] = ground_truth.loc[ground_truth.index.intersection(series.index)]
             truth_points = series[aligned_ground_truth]
@@ -290,7 +212,7 @@ def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results",
             )
         )
     
-    # Add anomaly scores if available
+    
     if scores is not None:
         if isinstance(scores, pd.Series):
             score_x = scores.index
@@ -311,7 +233,7 @@ def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results",
             secondary_y=True
         )
         
-        # Add threshold line if available
+        
         if threshold is not None:
             fig.add_trace(
                 go.Scatter(
@@ -324,7 +246,7 @@ def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results",
                 secondary_y=True
             )
     
-    # Update layout
+    
     fig.update_layout(
         title=title,
         xaxis_title='Time',
@@ -344,31 +266,11 @@ def plot_anomalies_plotly(series, anomalies, title="Anomaly Detection Results",
     return fig
 
 def compare_models(series, model_results, ground_truth=None, title="Model Comparison"):
-    """
-    Compare multiple anomaly detection models.
     
-    Parameters:
-    -----------
-    series: pd.Series
-        Time series data
-    model_results: dict
-        Dictionary of model results {model_name: anomalies}
-    ground_truth: pd.Series or np.ndarray, optional
-        Ground truth anomaly labels
-    title: str
-        Plot title
-        
-    Returns:
-    --------
-    plotly.graph_objects.Figure
-        Plotly figure object
-    dict
-        Dictionary of evaluation metrics by model
-    """
-    # Create figure
+    
     fig = go.Figure()
     
-    # Add time series
+    
     fig.add_trace(
         go.Scatter(
             x=series.index, 
@@ -379,28 +281,28 @@ def compare_models(series, model_results, ground_truth=None, title="Model Compar
         )
     )
     
-    # Add results for each model
+    
     colors = ['red', 'blue', 'green', 'purple', 'orange', 'cyan', 'magenta']
     metrics = {}
     
     for i, (model_name, anomalies) in enumerate(model_results.items()):
         color = colors[i % len(colors)]
         
-        # Extract anomaly points - fix for index alignment issue
+        
         if isinstance(anomalies, pd.Series):
-            # Make sure indices are aligned
+            
             if not anomalies.index.equals(series.index):
-                # Reindex to match the series index
+                
                 aligned_anomalies = pd.Series(False, index=series.index)
                 aligned_anomalies.loc[anomalies.index.intersection(series.index)] = anomalies.loc[anomalies.index.intersection(series.index)]
                 anomaly_points = series[aligned_anomalies]
             else:
                 anomaly_points = series[anomalies]
         else:
-            # For numpy arrays
+            
             anomaly_points = series.iloc[anomalies]
             
-        # Add to plot
+        
         fig.add_trace(
             go.Scatter(
                 x=anomaly_points.index,
@@ -411,10 +313,10 @@ def compare_models(series, model_results, ground_truth=None, title="Model Compar
             )
         )
         
-        # Calculate metrics if ground truth available
+        
         if ground_truth is not None:
             if isinstance(anomalies, pd.Series) and isinstance(ground_truth, pd.Series):
-                # Align indices
+                
                 aligned_data = pd.concat([anomalies, ground_truth], axis=1).fillna(False)
                 metrics[model_name] = calculate_metrics(
                     aligned_data.iloc[:, 1], 
@@ -428,10 +330,10 @@ def compare_models(series, model_results, ground_truth=None, title="Model Compar
                     verbose=False
                 )
     
-    # Add ground truth if available
+    
     if ground_truth is not None:
         if isinstance(ground_truth, pd.Series):
-            # Ensure ground truth aligns with series
+            
             aligned_ground_truth = pd.Series(False, index=series.index)
             aligned_ground_truth.loc[ground_truth.index.intersection(series.index)] = ground_truth.loc[ground_truth.index.intersection(series.index)]
             truth_points = series[aligned_ground_truth]
@@ -448,7 +350,7 @@ def compare_models(series, model_results, ground_truth=None, title="Model Compar
             )
         )
     
-    # Update layout
+    
     fig.update_layout(
         title=title,
         xaxis_title='Time',
